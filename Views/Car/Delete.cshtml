@@ -1,0 +1,10 @@
+﻿@model Car
+<h2>Araba Sil</h2>
+<hr />
+<h4>@Model.Brand @Model.Model Silinecektir. Onaylıyor musunuz?</h4>
+
+<form method="post" asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="Sil" class="btn btn-danger btn-sm" />
+    <a asp-action="Index" class="btn btn-primary btn-sm">İptal</a>
+</form>

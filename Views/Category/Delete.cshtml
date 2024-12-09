@@ -1,0 +1,10 @@
+﻿@model Category
+<h2>Kategori Sil</h2>
+<hr />
+<h4>@Model.Name adlı Kategori Silinecektir. Onaylıyor musunuz?</h4>
+
+<form method="post" asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <input type="submit" value="Sil" class="btn btn-danger btn-sm" />
+    <a asp-action="Index" class="btn btn-primary btn-sm">İptal</a>
+</form>

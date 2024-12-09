@@ -1,0 +1,33 @@
+﻿@model Renting
+
+<form method="post" enctype="multipart/form-data">
+
+    <div class="row">
+        <div class="border p-4 mt-5 rounded shadow">
+            <div class="row pb-3">
+                <h2 class="text-danger">Kiralama Sil</h2>
+                <hr />
+            </div>
+
+            <!-- Müşteri ID -->
+            <div class="mb-3">
+                <label asp-for="CustomerId" class="form-label fw-bold"></label>
+                <input asp-for="CustomerId" class="form-control" placeholder="Müşteri Seçiniz" disabled />
+            </div>
+
+            <!-- Araba ID -->
+            <div class="mb-3">
+                <label asp-for="CarId" class="form-label fw-bold"></label>
+                <select asp-for="CarId" asp-items="ViewBag.CarList" class="form-select shadow-sm" disabled>
+                    <option value="">Araba Seçiniz</option>
+                </select>
+            </div>
+
+            <!-- İşlem Butonları -->
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-danger px-4">Sil</button>
+                <a asp-controller="Renting" asp-action="Index" class="btn btn-secondary px-4">İptal</a>
+            </div>
+        </div>
+    </div>
+</form>

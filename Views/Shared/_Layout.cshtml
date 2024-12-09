@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Araç Kiralama Portalı</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Özel stil ayarları */
+        .navbar {
+            background-color: #0d6efd; /* Modern mavi */
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff !important;
+        }
+
+        .nav-link {
+            color: #f8f9fa !important;
+            font-size: 1rem;
+            margin-right: 15px;
+        }
+
+            .nav-link:hover {
+                color: #ffc107 !important; /* Hover rengi: Sarı */
+            }
+
+        .btn-custom {
+            background-color: #ffc107; /* Sarı düğme */
+            color: #0d6efd;
+            font-weight: bold;
+            border: none;
+        }
+
+            .btn-custom:hover {
+                background-color: #e0a800;
+            }
+
+        footer {
+            background-color: #0d6efd;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar Başlangıcı -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Kiralık Araçlar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">Anasayfa</a>
+                    </li>
+
+                    @if(User.IsInRole(UserRoles.Role_Admin)) {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Category" asp-action="Index">Kategoriler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Car" asp-action="Index">Arabalar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Renting" asp-action="Index">Kiralamalar</a>
+                    </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Contact" >İletişim</a>
+                    </li>
+                    
+                </ul>
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar Sonu -->
+    <!-- Dinamik İçerik -->
+    <div class="container mt-4">
+        @RenderBody()
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; @DateTime.Now.Year Araç Kiralama Portalı. Tüm Hakları Saklıdır.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    
+</body>
+</html>
