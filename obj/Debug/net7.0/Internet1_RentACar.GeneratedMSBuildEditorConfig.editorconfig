@@ -210,6 +210,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlcVXBkYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/kaan/source/repos/Internet1_RentACar/Internet1_RentACar/Views/Chat/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2hhdFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/kaan/source/repos/Internet1_RentACar/Internet1_RentACar/Views/Home/Contact.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDb250YWN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -220,6 +224,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/kaan/source/repos/Internet1_RentACar/Internet1_RentACar/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/kaan/source/repos/Internet1_RentACar/Internet1_RentACar/Views/Notes/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTm90ZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/kaan/source/repos/Internet1_RentACar/Internet1_RentACar/Views/Renting/Add.cshtml]
@@ -250,8 +258,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/kaan/source/repos/Internet1_RentACar/Internet1_RentACar/Views/ToAdd/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVG9BZGRcSW5kZXguY3NodG1s
+[C:/Users/kaan/source/repos/Internet1_RentACar/Internet1_RentACar/Views/User/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/kaan/source/repos/Internet1_RentACar/Internet1_RentACar/Views/_ViewImports.cshtml]
@@ -261,6 +269,10 @@ build_metadata.AdditionalFiles.CssScope =
 [C:/Users/kaan/source/repos/Internet1_RentACar/Internet1_RentACar/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/kaan/source/repos/Internet1_RentACar/Internet1_RentACar/Views/Shared/_AdminLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9BZG1pbkxheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = b-tyfbrjjhg0
 
 [C:/Users/kaan/source/repos/Internet1_RentACar/Internet1_RentACar/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s

@@ -3,6 +3,10 @@ using Internet1_RentACar.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
+using Internet1_RentACar.Hubs;
+using SignalR_CarCount.Hubs;
+using Microsoft.EntityFrameworkCore;
 
 namespace Internet1_RentACar.Controllers
 {
@@ -11,132 +15,175 @@ namespace Internet1_RentACar.Controllers
     {
         private readonly ICarRepository _carRepository;
         private readonly ICategoryRepository _categoryRepository;
-        public readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IHubContext<CarHub> _hubContext;
 
-
-        public CarController(ICarRepository carRepository, ICategoryRepository categoryRepository, IWebHostEnvironment webHostEnvironment)
+        public CarController(
+            ICarRepository carRepository,
+            ICategoryRepository categoryRepository,
+            IWebHostEnvironment webHostEnvironment,
+            IHubContext<CarHub> hubContext)
         {
             _carRepository = carRepository;
             _categoryRepository = categoryRepository;
             _webHostEnvironment = webHostEnvironment;
+            _hubContext = hubContext;
         }
 
         public IActionResult Index()
         {
-           // List<Car> objCarList = _carRepository.GetAll().ToList();
-            List<Car> objCarList = _carRepository.GetAll(includeProps:"Category").ToList();
-
-
-            return View(objCarList); 
+            var carList = _carRepository.GetAll(includeProps: "Category").ToList();
+            return View(carList);
         }
-        
-        public IActionResult Add(int? id)
-        {
-            IEnumerable<SelectListItem> CategoryList = _categoryRepository.GetAll()
-               .Select(k => new SelectListItem
-               {
-                   Text = k.Name,
-                   Value = k.Id.ToString()
-               });
 
-            ViewBag.CategoryList = CategoryList;
+        public IActionResult Add()
+        {
+            ViewBag.CategoryList = _categoryRepository.GetAll()
+                .Select(k => new SelectListItem
+                {
+                    Text = k.Name,
+                    Value = k.Id.ToString()
+                });
             return View();
         }
 
-
-        [HttpPost] 
-        public IActionResult Add(Car car, IFormFile? file)
+        [HttpPost]
+        public async Task<IActionResult> Add(Car car, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
-
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
-                string carPath = Path.Combine(wwwRootPath, @"img");
+                string carPath = Path.Combine(wwwRootPath, "img");
 
-                using (var fileStream = new FileStream(Path.Combine(carPath, file.FileName), FileMode.Create))
+                if (file != null)
                 {
-                    file.CopyTo(fileStream);
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string fullPath = Path.Combine(carPath, fileName);
+                    using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+                    car.PhotoUrl = $"/img/{fileName}";
                 }
-                car.PhotoUrl = @"\img\" + file.FileName;
 
                 _carRepository.Add(car);
                 _carRepository.Save();
+
+                // SignalR ile araba sayısını güncelle
+                var carCount = _carRepository.GetAll().Count();
+                await _hubContext.Clients.All.SendAsync("ReceiveCarCount", carCount);
+
                 TempData["basarili"] = "Başarıyla Eklendi";
-                return RedirectToAction("Index", "Car");
+                return RedirectToAction("Index");
             }
-            return View();
+
+            ViewBag.CategoryList = _categoryRepository.GetAll()
+                .Select(k => new SelectListItem
+                {
+                    Text = k.Name,
+                    Value = k.Id.ToString()
+                });
+
+            return View(car);
         }
+
         public IActionResult Update(int? id)
         {
-            if (id == null || id == 0)
+            if (id == null)
             {
                 return NotFound();
-
             }
-            IEnumerable<SelectListItem> CategoryList = _categoryRepository.GetAll()
-               .Select(k => new SelectListItem
-               {
-                   Text = k.Name,
-                   Value = k.Id.ToString()
-               });
 
-            ViewBag.CategoryList = CategoryList;
-            Car? car = _carRepository.Get(u=>u.Id==id);
+            var car = _carRepository.Get(u => u.Id == id);
             if (car == null)
             {
                 return NotFound();
             }
+
+            ViewBag.CategoryList = _categoryRepository.GetAll()
+                .Select(k => new SelectListItem
+                {
+                    Text = k.Name,
+                    Value = k.Id.ToString()
+                });
+
             return View(car);
         }
+
         [HttpPost]
-        public IActionResult Update(Car car, IFormFile? file)
+        public async Task<IActionResult> Update(Car car, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
-                string carPath = Path.Combine(wwwRootPath, @"img");
-                if (file != null) { 
-                using (var fileStream = new FileStream(Path.Combine(carPath, file.FileName), FileMode.Create))
+                string carPath = Path.Combine(wwwRootPath, "img");
+
+                if (file != null)
                 {
-                    file.CopyTo(fileStream);
-                }
-                car.PhotoUrl = @"\img\" + file.FileName;
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string fullPath = Path.Combine(carPath, fileName);
+                    using (var fileStream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+                    car.PhotoUrl = $"/img/{fileName}";
                 }
 
-
-            _carRepository.Update(car);
+                _carRepository.Update(car);
                 _carRepository.Save();
+
                 TempData["basarili"] = "Başarıyla Güncellendi";
-                return RedirectToAction("Index", "Car");
+                return RedirectToAction("Index");
             }
-            return View();
-        }
-        public IActionResult Delete(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            Car? car = _carRepository.Get(u => u.Id == id);
-            if (car == null)
-            {
-                return NotFound();
-            }
+
+            ViewBag.CategoryList = _categoryRepository.GetAll()
+                .Select(k => new SelectListItem
+                {
+                    Text = k.Name,
+                    Value = k.Id.ToString()
+                });
+
             return View(car);
         }
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePost(int? id) 
+
+        public IActionResult Delete(int? id)
         {
-            Car? car = _carRepository.Get(u => u.Id == id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var car = _carRepository.Get(u => u.Id == id);
             if (car == null)
             {
                 return NotFound();
             }
-            _carRepository.Delete(car);
-            _carRepository.Save();
-            return RedirectToAction("Index");
+
+            return View(car);
         }
 
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeletePost(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var car = _carRepository.Get(u => u.Id == id);
+            if (car == null)
+            {
+                return NotFound();
+            }
+
+            _carRepository.Delete(car);
+            _carRepository.Save();
+
+            // SignalR ile araba sayısını güncelle
+            var carCount = _carRepository.GetAll().Count();
+            await _hubContext.Clients.All.SendAsync("ReceiveCarCount", carCount);
+
+            return RedirectToAction("Index");
+        }
     }
 }

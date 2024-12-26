@@ -1,4 +1,8 @@
-﻿@model List<Renting>
+﻿@{
+    Layout = "_AdminLayout";
+}
+
+@model List<Renting>
 
 @if (TempData["basarili"] != null)
 {
@@ -29,7 +33,7 @@
                 {
                     <tr>
                         <td>@renting.Id</td>
-                        <td>@renting.CustomerId</td>
+                        <td>@renting.CustomerName</td>
                         <td>@renting.Car.Brand @renting.Car.Model</td>
                         
                         <td>

@@ -1,4 +1,8 @@
-﻿@model Renting
+﻿@{
+    Layout = "_AdminLayout";
+}
+
+@model Renting
 
 <form method="post" enctype="multipart/form-data">
 
@@ -11,8 +15,8 @@
 
             <!-- Müşteri ID -->
             <div class="mb-3">
-                <label asp-for="CustomerId" class="form-label fw-bold"></label>
-                <input asp-for="CustomerId" class="form-control" placeholder="Müşteri Seçiniz" disabled />
+                <label asp-for="CustomerName" class="form-label fw-bold"></label>
+                <input asp-for="CustomerName" class="form-control" placeholder="Müşteri Seçiniz" disabled />
             </div>
 
             <!-- Araba ID -->

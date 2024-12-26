@@ -1,0 +1,68 @@
+﻿@{
+    Layout = "_AdminLayout";
+}
+
+@{
+    ViewData["Title"] = "Eklenecekler";
+}
+
+<div class="container mt-4">
+    <h2>Eklencekler</h2>
+    <hr />
+
+   
+    <div class="mb-3">
+        <label for="noteInput" class="form-label">Eklenecekler listesi</label>
+        <input type="text" id="noteInput" class="form-control" placeholder="">
+    </div>
+    <button id="addNoteButton" class="btn btn-primary">Ekle</button>
+
+   
+    <div class="mt-4">
+        <h4>Eklencekler</h4>
+        <ul id="noteList" class="list-group">
+           
+        </ul>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        
+        loadNotes();
+
+        
+        $('#addNoteButton').on('click', function () {
+            const note = $('#noteInput').val().trim();
+            if (note) {
+                $.post('/Notes/AddNote', { note: note }, function (response) {
+                    if (response.success) {
+                        $('#noteInput').val(''); 
+                        renderNotes(response.notes); 
+                    } else {
+                        alert('An error occurred while adding the note.');
+                    }
+                });
+            } else {
+                alert('Please enter a note.');
+            }
+        });
+
+       
+        function loadNotes() {
+            $.get('/Notes/GetNotes', function (notes) {
+                renderNotes(notes);
+            });
+        }
+
+       
+        function renderNotes(notes) {
+            const noteList = $('#noteList');
+            noteList.empty(); 
+            notes.forEach(function (note, index) {
+                noteList.append(`<li class="list-group-item">${index + 1}. ${note}</li>`);
+            });
+        }
+    });
+</script>

@@ -9,7 +9,7 @@ namespace Internet1_RentACar.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        public int CustomerId { get; set; }
+        public string? CustomerName { get; set; }
         [ValidateNever]
         public int CarId { get; set; }
         [ForeignKey("CarId")]

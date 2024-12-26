@@ -1,4 +1,23 @@
-﻿@model List<Car>
+﻿@{
+    Layout = "_AdminLayout";
+}
+
+@model List<Car>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/carHub")
+            .build();
+
+        connection.on("UpdateCarCount", function (carCount) {
+            document.getElementById("carCount").innerText = carCount;
+        });
+
+        connection.start().catch(err => console.error(err));
+    </script>
+}
 
 @if (TempData["basarili"] != null)
 {
@@ -8,11 +27,14 @@
     </div>
 }
 
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Araba Listesi</h2>
+        <div class="badge bg-primary text-white fs-5" id="carCountContainer">
+            Toplam Arabalar: <span id="carCount">@Model.Count</span>
+        </div>
+    </div>
 
-<div class="container mt-5" >
-    <h2 class="mb-4">Araba Listesi</h2>
-
-    
     <table class="table table-striped table-hover table-bordered">
         <thead class="table-dark">
             <tr>
@@ -32,14 +54,14 @@
                 {
                     <tr>
                         <td>@car.Id</td>
-                        <td>@car.Brand</td>              
+                        <td>@car.Brand</td>
                         <td>@car.Model</td>
                         <td>@car.Category.Name</td>
                         <td>@car.Description</td>
                         <td>@car.Price.ToString("C")</td>
                         <td>
                             <a asp-action="Update" asp-controller="Car" asp-route-id="@car.Id" class="btn btn-primary btn-sm">Düzenle</a>
-                            <a asp-action="Delete" asp-controller="Car" asp-route-id="@car.Id" class="btn btn-danger btn-sm" >Sil</a>
+                            <a asp-action="Delete" asp-controller="Car" asp-route-id="@car.Id" class="btn btn-danger btn-sm">Sil</a>
                         </td>
                     </tr>
                 }
@@ -47,13 +69,12 @@
             else
             {
                 <tr>
-                    <td colspan="6" class="text-center">Listelenecek araba bulunamadı.</td>
+                    <td colspan="7" class="text-center">Listelenecek araba bulunamadı.</td>
                 </tr>
             }
         </tbody>
     </table>
 
-    
     <div class="d-flex justify-content-start mt-3">
         <a asp-action="Add" asp-controller="Car" class="btn btn-success">Araba Ekle</a>
     </div>
